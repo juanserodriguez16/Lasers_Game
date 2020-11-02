@@ -10,8 +10,11 @@ public class Gamezone {
 	private Cell firstCol;
 	private int nummirrors;
 	private int mirrorsasig;
+	private String gamer;
+	private String matrix;
 	
-	public Gamezone(int numfilas, int numcolumnas, int nummirrors) {
+	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
+		this.gamer = gamer;
 		this.numfilas = numfilas;
 		this.numcolumnas = numcolumnas;
 		this.nummirrors = nummirrors;
@@ -21,10 +24,14 @@ public class Gamezone {
 		numfasig = 0;
 		numcasig = 0;
 		mirrorsasig = 0;
+		matrix = "";
 		
-		newCell();
-		newMirrow();
+	
 		
+		
+	}
+	public Cell getActual() {
+		return actual;
 		
 	}
 	public void setFirst() {
@@ -134,19 +141,48 @@ public class Gamezone {
 	
 	public void ShowCell() {
 		if(actual != null) {
-			System.out.print("["+actual.getMirror()+"]");
+			setMatrix(getMatrix() + "["+actual.getMirror()+"]" );
+			/*System.out.print("["+actual.getMirror()+"]");*/
 			if (actual.getRigthcell() != null) 
 				actual = actual.getRigthcell();
-			 else {
-				 System.out.println("");
+			else {
+				
+				setMatrix(getMatrix() + "\n");
+				/*System.out.println("");*/
 				actual = firstCol.getDowncell();
 				firstCol = firstCol.getDowncell();
-			 }
+			
+			}
 			ShowCell();
 
 		}
 		
 	}	
+	/*identifico donde va a empezar el rayo y lo pongo en la variable actual*/
+	public void getStartray(int f , int c) {
+		if ((actual.getFila() != f && actual.getColumna() != c)){
+			if (actual.getRigthcell() != null) 
+				actual = actual.getRigthcell();
+			else {
+				actual = firstCol.getDowncell();
+				firstCol = firstCol.getDowncell();
+			
+			}
+			getStartray(f,c);
+			}
+		}
+	
+	public void moverigth() {
+		
+	}
+
+	public void move() {
+		if((actual.getColumna()==1 && actual.getFila() == 1) || (actual.getColumna()==1 && actual.getFila() == numfilas) || 
+				(actual.getColumna()==numcolumnas && actual.getFila() == 1) || (actual.getColumna()==numcolumnas && actual.getFila() == numfilas)) {
+			
+		}
+	}
+	
 	/*
 	public void addRight(long n) {
 		Number newnumber = new Number(n);
@@ -165,6 +201,18 @@ public class Gamezone {
 		}
 	}
 	*/
+	public String getGamer() {
+		return gamer;
+	}
+	public void setGamer(String gamer) {
+		this.gamer = gamer;
+	}
+	public String getMatrix() {
+		return matrix;
+	}
+	public void setMatrix(String matrix) {
+		this.matrix = matrix;
+	}
 	
 }
 

@@ -8,6 +8,7 @@ public class Gamezone {
 	private Cell first;
 	private Cell actual;
 	private Cell firstCol;
+	private Cell current;
 	private int nummirrors;
 	private int mirrorsasig;
 	private String gamer;
@@ -21,6 +22,7 @@ public class Gamezone {
 		first = null;
 		actual = null;
 		firstCol = null;
+		current = null;
 		numfasig = 0;
 		numcasig = 0;
 		mirrorsasig = 0;
@@ -37,6 +39,7 @@ public class Gamezone {
 	public void setFirst() {
 		actual = first;
 		firstCol = first;
+		current = first;
 	}
 	public int getNumfilas() {
 		return numfilas;
@@ -170,19 +173,106 @@ public class Gamezone {
 			}
 			getStartray(f,c);
 			}
+		
+		current = actual;
 		}
 	
 	public void moverigth() {
+		current = actual;
+		actual = actual.getRigthcell();
+	}
+	public void moveleft() {
+		current = actual;
+		actual = actual.getLefthcell();
+	}
+	public void moveup() {
+		current = actual;
+		actual = actual.getUpcell();
+	}
+	public void movedown() {
+		current = actual;
+		actual = actual.getDowncell();
+	}
+	public void move() {
+		if (actual != null) {
+			if((actual.getColumna()==1 && actual.getFila() == 1) || (actual.getColumna()==1 && actual.getFila() == numfilas) || 
+					(first.getColumna()==numcolumnas && actual.getFila() == 1) || (actual.getColumna()==numcolumnas && actual.getFila() == numfilas)) {
+			}else if(actual.getFila() == 1) {
+				startup();
+			}else if (actual.getFila()== numfilas) {
+				startdown();
+			}else if(actual.getColumna()== 1) {
+				startrigth();
+			}else if( actual.getColumna()== numcolumnas){
+				startleft();
+				
+			}else if(current == actual.getUpcell()) {
+				startup();
+				
+			}else if(current == actual.getDowncell()) {
+				startdown();
+			}else if(current == actual.getLefthcell()) {
+				startleft();
+			}else if (current == actual.getRigthcell()) {
+				startrigth();
+			}
+			move();
+		}
+		
 		
 	}
 
-	public void move() {
-		if((actual.getColumna()==1 && actual.getFila() == 1) || (actual.getColumna()==1 && actual.getFila() == numfilas) || 
-				(actual.getColumna()==numcolumnas && actual.getFila() == 1) || (actual.getColumna()==numcolumnas && actual.getFila() == numfilas)) {
-			
+	public void startup() {
+		if(mpos() == 0) {
+			movedown();
+		}else if(mpos() == 1) {
+			moveleft();
+		}else if(mpos() == 2) {
+			moverigth();
 		}
+
 	}
-	
+	public void startdown() {
+		if(mpos() == 0) {
+			moveup();
+		}else if(mpos() == 1) {
+			moverigth();
+		}else if(mpos() == 2) {
+			moveleft();
+		}
+
+	}
+	public void startrigth() {
+		if(mpos() == 0) {
+			moverigth();
+		}else if(mpos() == 1) {
+			moveup();
+		}else if(mpos() == 2) {
+			movedown();
+		}
+
+	}
+	public void startleft() {
+		if(mpos() == 0) {
+			moveleft();
+		}else if(mpos() == 1) {
+			movedown();
+		}else if(mpos() == 2) {
+			moveup();
+		}
+
+	}
+	public int mpos() {
+		int mp = 0;
+		if(actual.getMirror().equalsIgnoreCase("\\")) {
+			mp = 2;
+		}else if(actual.getMirror().equalsIgnoreCase("/")) {
+			mp = 1;
+		}else if(actual.getMirror().equalsIgnoreCase(" ")) {
+			mp = 0;
+		}
+		return mp;
+	}
 	/*
 	public void addRight(long n) {
 		Number newnumber = new Number(n);

@@ -38,15 +38,21 @@ public class Menu {
 		if (b.equalsIgnoreCase("L")) {
 			
 		}else {
-			readcoordenadas(opt);
+			
 		}
 		
 		}
-	public void readcoordenadas(String opt) {
-		
+	public void readcoordenadas( ) {
+		gz.setFirst();
+		String opt = sc.nextLine();
 		int fila = opt.charAt(0);
 		int columna = (int)opt.charAt(1) - 64;
+		gz.getStartray(fila, columna);
 		
+		int f = gz.getActual().getFila();
+		int c = gz.getActual().getColumna();
+		
+		System.out.println(f + "" + c);
 	}
 	
 	
@@ -72,6 +78,7 @@ public class Menu {
 			case 1: creategamezone();
 
 			showMatrix();
+			readcoordenadas( );
 
 			break;
 			case 2: 

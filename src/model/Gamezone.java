@@ -13,6 +13,10 @@ public class Gamezone {
 	private int mirrorsasig;
 	private String gamer;
 	private String matrix;
+	private int contmirrors;
+	private int direction;
+	private Cell cellIn;
+	private Cell cellOut;
 	
 	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
@@ -22,12 +26,14 @@ public class Gamezone {
 		first = null;
 		actual = null;
 		firstCol = null;
-		current = null;
+		setCurrent(null);
+		setCellIn(null);
+		setCellOut(null);
 		numfasig = 0;
 		numcasig = 0;
 		mirrorsasig = 0;
 		matrix = "";
-		
+		contmirrors = 0;
 	
 		
 		
@@ -39,7 +45,8 @@ public class Gamezone {
 	public void setFirst() {
 		actual = first;
 		firstCol = first;
-		current = first;
+		setCurrent(first);
+		matrix = "";
 	}
 	public int getNumfilas() {
 		return numfilas;
@@ -143,8 +150,19 @@ public class Gamezone {
 
 	
 	public void ShowCell() {
+		String mat;
 		if(actual != null) {
-			setMatrix(getMatrix() + "["+actual.getMirror()+"]" );
+			
+			if(cellIn == actual)
+				mat = "[E]";
+			else if (cellOut == actual)
+				mat = "[S]";
+			else if(actual.isFindMirrow())
+				mat = "["+actual.getMirror()+"]";
+			else
+				mat = "[ ]";
+			setMatrix(getMatrix() + mat );
+			
 			/*System.out.print("["+actual.getMirror()+"]");*/
 			if (actual.getRigthcell() != null) 
 				actual = actual.getRigthcell();
@@ -163,106 +181,83 @@ public class Gamezone {
 	}	
 	/*identifico donde va a empezar el rayo y lo pongo en la variable actual*/
 	public void getStartray(int f , int c) {
-		if ((actual.getFila() != f && actual.getColumna() != c)){
-			if (actual.getRigthcell() != null) 
+		if (actual.getFila() != f || actual.getColumna() != c){
+			if (actual.getRigthcell() != null && actual.getColumna() != c) 
 				actual = actual.getRigthcell();
 			else {
+				if (actual.getFila() != f && actual.getDowncell() != null)
+				{
 				actual = firstCol.getDowncell();
 				firstCol = firstCol.getDowncell();
+				}
 			
 			}
 			getStartray(f,c);
 			}
 		
-		current = actual;
+		setCurrent(actual);
 		}
 	
 	public void moverigth() {
-		current = actual;
+		setCurrent(actual);
 		actual = actual.getRigthcell();
 	}
 	public void moveleft() {
-		current = actual;
+		setCurrent(actual);
 		actual = actual.getLefthcell();
 	}
 	public void moveup() {
-		current = actual;
+		setCurrent(actual);
 		actual = actual.getUpcell();
 	}
 	public void movedown() {
-		current = actual;
+		setCurrent(actual);
 		actual = actual.getDowncell();
 	}
+	
 	public void move() {
+		int vCelda = 0;
 		if (actual != null) {
-			if((actual.getColumna()==1 && actual.getFila() == 1) || (actual.getColumna()==1 && actual.getFila() == numfilas) || 
-					(first.getColumna()==numcolumnas && actual.getFila() == 1) || (actual.getColumna()==numcolumnas && actual.getFila() == numfilas)) {
-			}else if(actual.getFila() == 1) {
-				startup();
-			}else if (actual.getFila()== numfilas) {
-				startdown();
-			}else if(actual.getColumna()== 1) {
-				startrigth();
-			}else if( actual.getColumna()== numcolumnas){
-				startleft();
-				
-			}else if(current == actual.getUpcell()) {
-				startup();
-				
-			}else if(current == actual.getDowncell()) {
-				startdown();
-			}else if(current == actual.getLefthcell()) {
-				startleft();
-			}else if (current == actual.getRigthcell()) {
-				startrigth();
-			}
-			move();
+			vCelda = mpos();
+				if (vCelda != 0) {
+					if(vCelda == 1 && getDirection() == 1) // DE arriba hacia abajo
+						setDirection (4); //salir a la izquierda
+					else if(vCelda == 1 && getDirection() == 2) // DE abajo hacia arriba
+						setDirection (3); //salir a derecha
+					else if(vCelda == 1 && getDirection() == 3) // DE derecha a Izquierda
+						setDirection (2); //salir a la arriba
+					else if(vCelda == 1 && getDirection() == 4) // DE iquierda a derecha
+						setDirection (1); //salir a abajo
+					else if(vCelda == 2 && getDirection() == 1) // DE arriba hacia abajo
+						setDirection (3); //salir a la derecha
+					else if(vCelda == 2 && getDirection() == 2) // DE abajo hacia arriba
+						setDirection (4); //salir a izquierda
+					else if(vCelda == 2 && getDirection() == 3) // DE derecha a Izquierda
+						setDirection (1); //salir a abajo
+					else if(vCelda == 2 && getDirection() == 4) // DE iquierda a derecha
+						setDirection (2); //salir a arriba
+				}
+				switch (getDirection()) {
+					case 1:
+						movedown();
+						break;
+					case 2:
+						moveup();
+						break;
+					case 3:
+						moverigth();
+						break;
+					case 4:
+						moveleft();
+						break;
+				}
+				move();
 		}
 		
 		
 	}
 
-	public void startup() {
-		if(mpos() == 0) {
-			movedown();
-		}else if(mpos() == 1) {
-			moveleft();
-		}else if(mpos() == 2) {
-			moverigth();
-		}
-
-	}
-	public void startdown() {
-		if(mpos() == 0) {
-			moveup();
-		}else if(mpos() == 1) {
-			moverigth();
-		}else if(mpos() == 2) {
-			moveleft();
-		}
-
-	}
-	public void startrigth() {
-		if(mpos() == 0) {
-			moverigth();
-		}else if(mpos() == 1) {
-			moveup();
-		}else if(mpos() == 2) {
-			movedown();
-		}
-
-	}
-	public void startleft() {
-		if(mpos() == 0) {
-			moveleft();
-		}else if(mpos() == 1) {
-			movedown();
-		}else if(mpos() == 2) {
-			moveup();
-		}
-
-	}
-	public int mpos() {
+		public int mpos() {
 		int mp = 0;
 		if(actual.getMirror().equalsIgnoreCase("\\")) {
 			mp = 2;
@@ -302,6 +297,36 @@ public class Gamezone {
 	}
 	public void setMatrix(String matrix) {
 		this.matrix = matrix;
+	}
+	public int getContmirrors() {
+		return contmirrors;
+	}
+	public void setContmirrors(int contmirrors) {
+		this.contmirrors = contmirrors;
+	}
+	public int getDirection() {
+		return direction;
+	}
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+	public Cell getCurrent() {
+		return current;
+	}
+	public void setCurrent(Cell current) {
+		this.current = current;
+	}
+	public Cell getCellIn() {
+		return cellIn;
+	}
+	public void setCellIn(Cell cellIn) {
+		this.cellIn = cellIn;
+	}
+	public Cell getCellOut() {
+		return cellOut;
+	}
+	public void setCellOut(Cell cellOut) {
+		this.cellOut = cellOut;
 	}
 	
 }

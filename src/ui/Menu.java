@@ -7,15 +7,24 @@ import model.Gamezone;
 public class Menu {
 	private static Gamezone gz;
 	private static Scanner sc;
-	
+	private int mf;
+	private int mc;
+	private String opcion;
+
+
 	public void initialize() {
-	 sc = new Scanner(System.in);
+		sc = new Scanner(System.in);
+		mf = 0;
+		mc = 0;
+		opcion = "";
 	}
 	public void showmenu() {
 		System.out.println("1) Jugar");
 		System.out.println("2) Mostrar tabla de posiciones");
 		System.out.println("3) Salir del juego");
 	}
+
+	
 	public void creategamezone() {
 		System.out.println("Digita los siguientes datos separados por espacios \n(nombre de usuario, filas de la cuadricula,"
 				+ " columnas de la cuadricula , cantidad de espejos)");
@@ -24,48 +33,102 @@ public class Menu {
 		gz = new Gamezone(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
 		gz.	newCell();
 		gz.newMirrow();
-		
+
 	}
 	public void showMatrix() {
 		gz.setFirst();
 		gz.ShowCell();
 		System.out.println(gz.getMatrix());
 	}
-	public void nextoption() {
-		String opt = sc.nextLine();
-		char a = opt.charAt(0);
-		String b = "" + a;
-		if (b.equalsIgnoreCase("L")) {
-			
-		}else {
-			
-		}
-		
-		}
 	public void readcoordenadas( ) {
+		int n1, n2, fila = 0, columna = 0;
+		boolean esquina = false;
+		String fil, col;
 		gz.setFirst();
 		String opt = sc.nextLine();
-		int fila = opt.charAt(0);
-		int columna = (int)opt.charAt(1) - 64;
-		gz.getStartray(fila, columna);
-		
-		int f = gz.getActual().getFila();
-		int c = gz.getActual().getColumna();
-		
-		System.out.println(f + "" + c);
+
+		opt = opt.toUpperCase();
+		char l = opt.charAt(0);
+		String locate = l + "";
+		char d = opt.charAt(opt.length()-1);
+		String direc = d + "";
+		char z = opt.charAt(opt.length()-2);
+		n1 = d;
+		n2 = z;
+		if (locate.equalsIgnoreCase("L")) {
+			fil = opt.substring(1, opt.length()-2);
+			col = (opt.charAt(opt.length()-2) - 64) +"";	
+			fila= Integer.parseInt(fil);
+			columna = Integer.parseInt(col)  ;
+			gz.getStartray(fila, columna);
+			String mi = gz.getActual().getMirror();
+			if(mi.equalsIgnoreCase("/"))
+				mi = "R";
+			else if(mi.equalsIgnoreCase("\\"))
+				mi = "L";
+			if(mi.equalsIgnoreCase(direc)) {
+				gz.getActual().setFindMirrow(true);
+			}
+
+		}else {
+			if(n1>=65 && n1 <= 90 && n2>=65 && n2 <= 90) {
+				esquina = true;
+				fil = opt.substring(0, opt.length()-2);
+				col = (opt.charAt(opt.length()-2) - 64) +"";	
+
+			}
+			else
+			{
+				fil = opt.substring(0, opt.length()-1);
+				col = (opt.charAt(opt.length()-1) -64 )+"";					
+
+			}
+			fila= Integer.parseInt(fil);
+			columna = Integer.parseInt(col)  ;
+			gz.setCellIn(null);
+			gz.setCellOut(null);
+			gz.getStartray(fila, columna);
+			gz.setCellIn(gz.getActual());
+
+			if (esquina && gz.getActual().getFila() == 1 && gz.getActual().getColumna() == 1 && direc.equalsIgnoreCase("H")) 
+				gz.setDirection(3);
+			else if (esquina && gz.getActual().getFila() == 1 && gz.getActual().getColumna() == 1 && direc.equalsIgnoreCase("V"))
+				gz.setDirection(1);
+			else if (esquina && gz.getActual().getFila() == 1 && gz.getActual().getColumna() == gz.getNumcolumnas() && direc.equalsIgnoreCase("H"))
+				gz.setDirection(4);
+			else if (esquina && gz.getActual().getFila() == 1 && gz.getActual().getColumna() == gz.getNumcolumnas() && direc.equalsIgnoreCase("V"))
+				gz.setDirection(1);
+			else if (esquina && gz.getActual().getFila() == gz.getNumfilas() && gz.getActual().getColumna() == 1 && direc.equalsIgnoreCase("H"))
+				gz.setDirection(3);
+			else if (esquina && gz.getActual().getFila() == gz.getNumfilas() && gz.getActual().getColumna() == 1 && direc.equalsIgnoreCase("V"))
+				gz.setDirection(2);
+			else if (esquina && gz.getActual().getFila() == gz.getNumfilas() && gz.getActual().getColumna() == gz.getNumcolumnas() && direc.equalsIgnoreCase("H"))
+				gz.setDirection(4);
+			else if (esquina && gz.getActual().getFila() == gz.getNumfilas() && gz.getActual().getColumna() == gz.getNumcolumnas() && direc.equalsIgnoreCase("V"))
+				gz.setDirection(2);
+			else if(gz.getActual().getFila() == 1)
+				gz.setDirection(1);
+			else if(gz.getActual().getFila() == gz.getNumfilas())
+				gz.setDirection(2);
+			else if(gz.getActual().getColumna() == 1)
+				gz.setDirection(3);
+			else if(gz.getActual().getColumna() == gz.getNumcolumnas())
+				gz.setDirection(4);
+			gz.move();
+			gz.setCellOut(gz.getCurrent());
+			int f = gz.getCurrent().getFila();
+			int c = gz.getCurrent().getColumna();
+
+			System.out.println(f + "" + c);
+		}
 	}
-	
-	
-	public void menu() {
-		
-	initialize();
-	creategamezone();
-	
-	gz.ShowCell();
-	
-	showMatrix();
-	
-	
+
+	public void play() {
+		if (gz.getContmirrors() == 0) {
+			showMatrix();
+			readcoordenadas( );
+			play();
+		}
 	}
 	public void startprogram() {
 
@@ -75,16 +138,33 @@ public class Menu {
 
 
 			switch(x) {
-			case 1: creategamezone();
+			case 1:
+				creategamezone();
+				play();
 
-			showMatrix();
-			readcoordenadas( );
-
-			break;
+				break;
 			case 2: 
 			}
 			startprogram();	
 		}
-		
+
+	}
+	public int getMf() {
+		return mf;
+	}
+	public void setMf(int mf) {
+		this.mf = mf;
+	}
+	public int getMc() {
+		return mc;
+	}
+	public void setMc(int mc) {
+		this.mc = mc;
+	}
+	public String getOpcion() {
+		return opcion;
+	}
+	public void setOpcion(String opcion) {
+		this.opcion = opcion;
 	}
 }

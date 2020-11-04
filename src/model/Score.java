@@ -57,8 +57,7 @@ public class Score {
 		this.numcolumnas = numcolumnas;
 	}
 	public int getNummirrors() {
-		return nummirrors;
-	}
+		return nummirrors;	}
 	public void setNummirrors(int nummirrors) {
 		this.nummirrors = nummirrors;
 	}

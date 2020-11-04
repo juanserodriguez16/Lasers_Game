@@ -5,11 +5,20 @@ public class Score {
 	private int points;
 	private Score left;
 	private Score right;
+	private Score parent;
+	private int numfilas;
+	private int numcolumnas;
+	private int nummirrors;
 	
-	public Score (String player, int points) {
+	public Score (String player, int points, int numfilas, int numcolumnas, int nummirrors) {
 		this.player = player;
 		this.points = points;
-		
+		this.numfilas = numfilas;
+		this.numcolumnas = numcolumnas;
+		this.nummirrors = nummirrors;
+		parent = null;
+		left = null;
+		right = null;
 	}
 	public String getPlayer() {
 		return player;
@@ -35,21 +44,38 @@ public class Score {
 	public void setLeft(Score left) {
 		this.left = left;
 	}
-	public void add(String player, Integer points) {
-	    if (points < this.points) {
-	        if (left != null) {
-	            left.add( player ,points);
-	        } else {
-	            left = new Score(player, points);
-	        }
-	    } else {
-	        if (right != null) {
-	            right.add(player, points);
-	        } else {
-	            right = new Score(player, points);
-	        }
-	    }
+	public int getNumfilas() {
+		return numfilas;
 	}
-	
+	public void setNumfilas(int numfilas) {
+		this.numfilas = numfilas;
+	}
+	public int getNumcolumnas() {
+		return numcolumnas;
+	}
+	public void setNumcolumnas(int numcolumnas) {
+		this.numcolumnas = numcolumnas;
+	}
+	public int getNummirrors() {
+		return nummirrors;
+	}
+	public void setNummirrors(int nummirrors) {
+		this.nummirrors = nummirrors;
+	}
+	public void printInOrder() {
+        if (left != null) {
+            left.printInOrder();
+        }
+        System.out.println(getPoints() + " " + getPlayer() );
+        if (right != null) {
+            right.printInOrder();
+        }
+    }
+	public Score getParent() {
+		return parent;
+	}
+	public void setParent(Score parent) {
+		this.parent = parent;
+	}
 
 }

@@ -3,10 +3,12 @@ package ui;
 import java.util.Scanner;
 
 import model.Gamezone;
+import model.Score;
 
 public class Menu {
 	private static Gamezone gz;
 	private static Scanner sc;
+	private static Score score;
 
 
 
@@ -131,10 +133,13 @@ public class Menu {
 			System.out.println(gz.getGamer() +" te faltan " + gz.getContmirrors() + " espejos por encontrar");
 			play();
 		}
-		System.out.println("Felicidades ganaste");
-	}
-	public void calculatepoints() {
 		
+		//player, points, numfilas, numcolumnas, nummirrors
+		
+	}
+	public int  calculatepoints() {
+		int puntos = (gz.getNumcolumnas() * gz.getNumfilas()) / gz.getNummirrors();
+		return puntos;
 	}
 	public void startprogram() {
 
@@ -147,9 +152,10 @@ public class Menu {
 			case 1:
 				creategamezone();
 				play();
-
+				System.out.println("Felicidades ganaste");
 				break;
 			case 2: 
+				score.printInOrder();
 			}
 			startprogram();	
 		}

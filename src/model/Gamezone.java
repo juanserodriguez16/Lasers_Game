@@ -18,6 +18,7 @@ public class Gamezone {
 	private Cell cellIn;
 	private Cell cellOut;
 	private Cell cellx;
+	private Score root;
 
 	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
@@ -36,6 +37,8 @@ public class Gamezone {
 		mirrorsasig = 0;
 		matrix = "";
 		contmirrors = nummirrors;
+		root = null;
+		
 
 
 
@@ -321,6 +324,26 @@ public class Gamezone {
 	public void setCellx(Cell cellx) {
 		this.cellx = cellx;
 	}
-
+	public Score getRoot() {
+		return root;
+	}
+	public void setRoot(Score root) {
+		this.root = root;
+	}
+	public void addScore(Score newScore) {
+		if (root == null)
+			root = newScore;
+		else 
+			addScore(root,newScore); 
+	}
+	public void addScore(Score recur, Score newScore ) {
+		if(newScore.getPoints()<= recur.getPoints() && recur.getLeft() ==null) {
+			recur.setLeft(newScore);
+			newScore.setParent(recur);
+		}else if (newScore.getPoints()>recur.getPoints() && recur.getRight()==null) {
+			recur.setRight(newScore);
+			newScore.setParent(recur);	
+		}
+	}
 }
 

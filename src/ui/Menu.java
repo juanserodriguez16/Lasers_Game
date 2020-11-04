@@ -7,16 +7,12 @@ import model.Gamezone;
 public class Menu {
 	private static Gamezone gz;
 	private static Scanner sc;
-	private int mf;
-	private int mc;
-	private String opcion;
+
 
 
 	public void initialize() {
 		sc = new Scanner(System.in);
-		mf = 0;
-		mc = 0;
-		opcion = "";
+
 	}
 	public void showmenu() {
 		System.out.println("1) Jugar");
@@ -24,7 +20,7 @@ public class Menu {
 		System.out.println("3) Salir del juego");
 	}
 
-	
+
 	public void creategamezone() {
 		System.out.println("Digita los siguientes datos separados por espacios \n(nombre de usuario, filas de la cuadricula,"
 				+ " columnas de la cuadricula , cantidad de espejos)");
@@ -56,6 +52,9 @@ public class Menu {
 		n1 = d;
 		n2 = z;
 		if (locate.equalsIgnoreCase("L")) {
+			gz.setCellIn(null);
+			gz.setCellOut(null);
+			gz.setCellx(null);
 			fil = opt.substring(1, opt.length()-2);
 			col = (opt.charAt(opt.length()-2) - 64) +"";	
 			fila= Integer.parseInt(fil);
@@ -68,7 +67,9 @@ public class Menu {
 				mi = "L";
 			if(mi.equalsIgnoreCase(direc)) {
 				gz.getActual().setFindMirrow(true);
-			}
+				gz.setContmirrors(gz.getContmirrors()-1);
+			}else 
+				gz.setCellx(gz.getActual());
 
 		}else {
 			if(n1>=65 && n1 <= 90 && n2>=65 && n2 <= 90) {
@@ -87,6 +88,7 @@ public class Menu {
 			columna = Integer.parseInt(col)  ;
 			gz.setCellIn(null);
 			gz.setCellOut(null);
+			gz.setCellx(null);
 			gz.getStartray(fila, columna);
 			gz.setCellIn(gz.getActual());
 
@@ -116,19 +118,23 @@ public class Menu {
 				gz.setDirection(4);
 			gz.move();
 			gz.setCellOut(gz.getCurrent());
-			int f = gz.getCurrent().getFila();
-			int c = gz.getCurrent().getColumna();
 
-			System.out.println(f + "" + c);
+
+
 		}
 	}
 
 	public void play() {
-		if (gz.getContmirrors() == 0) {
+		if (gz.getContmirrors() != 0) {
 			showMatrix();
 			readcoordenadas( );
+			System.out.println(gz.getGamer() +" te faltan " + gz.getContmirrors() + " espejos por encontrar");
 			play();
 		}
+		System.out.println("Felicidades ganaste");
+	}
+	public void calculatepoints() {
+		
 	}
 	public void startprogram() {
 
@@ -149,22 +155,5 @@ public class Menu {
 		}
 
 	}
-	public int getMf() {
-		return mf;
-	}
-	public void setMf(int mf) {
-		this.mf = mf;
-	}
-	public int getMc() {
-		return mc;
-	}
-	public void setMc(int mc) {
-		this.mc = mc;
-	}
-	public String getOpcion() {
-		return opcion;
-	}
-	public void setOpcion(String opcion) {
-		this.opcion = opcion;
-	}
+
 }

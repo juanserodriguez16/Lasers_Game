@@ -17,7 +17,8 @@ public class Gamezone {
 	private int direction;
 	private Cell cellIn;
 	private Cell cellOut;
-	
+	private Cell cellx;
+
 	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
 		this.numfilas = numfilas;
@@ -29,24 +30,26 @@ public class Gamezone {
 		setCurrent(null);
 		setCellIn(null);
 		setCellOut(null);
+		setCellx(null);
 		numfasig = 0;
 		numcasig = 0;
 		mirrorsasig = 0;
 		matrix = "";
-		contmirrors = 0;
-	
-		
-		
+		contmirrors = nummirrors;
+
+
+
 	}
 	public Cell getActual() {
 		return actual;
-		
+
 	}
 	public void setFirst() {
 		actual = first;
 		firstCol = first;
 		setCurrent(first);
 		matrix = "";
+
 	}
 	public int getNumfilas() {
 		return numfilas;
@@ -61,13 +64,13 @@ public class Gamezone {
 		this.numcolumnas = numcolumnas;
 	}
 
-	
+
 	public void newCell() {
 		boolean newfila;
-		
+
 		newfila = false;
 		numcasig ++;
-		
+
 		if(numfasig == 0) {
 			numfasig++;	
 
@@ -103,14 +106,14 @@ public class Gamezone {
 			}
 			newCell();
 		}
-		
+
 	}
 
 	public void newMirrow() {
 		int rowmirrow = 0;
 		int colmirrow = 0;
 		int direction = 0;
-		
+
 		rowmirrow = (int) (Math.random()*numfilas + 1);
 		colmirrow = (int) (Math.random()*numcolumnas + 1);
 		direction = (int) (Math.random()*2 + 1);
@@ -129,16 +132,16 @@ public class Gamezone {
 			if(nodo.getFila() != rowmirrow)
 				AsigMirrow(rowmirrow, colmirrow, direction, nodo.getDowncell());
 			else
-				{
-					if (direction == 1) mirr = "/"; else mirr = "\\";
-					
-					if (nodo.getMirror().equalsIgnoreCase(" "))
-						nodo.setMirror(mirr);
-					else
-						mirrorsasig --;
-				}
-			
+			{
+				if (direction == 1) mirr = "/"; else mirr = "\\";
+
+				if (nodo.getMirror().equalsIgnoreCase(" "))
+					nodo.setMirror(mirr);
+				else
+					mirrorsasig --;
 			}
+
+		}
 	}
 
 	public int getNummirrors() {
@@ -148,36 +151,37 @@ public class Gamezone {
 		this.nummirrors = nummirrors;
 	}
 
-	
+
 	public void ShowCell() {
 		String mat;
 		if(actual != null) {
-			
-			if(cellIn == actual)
-				mat = "[E]";
-			else if (cellOut == actual)
+			if (cellx == actual)
+				mat = "[X]";
+			else if(cellIn == actual)
 				mat = "[S]";
+			else if (cellOut == actual)
+				mat = "[E]";
 			else if(actual.isFindMirrow())
 				mat = "["+actual.getMirror()+"]";
 			else
 				mat = "[ ]";
 			setMatrix(getMatrix() + mat );
-			
-			
+
+
 			if (actual.getRigthcell() != null) 
 				actual = actual.getRigthcell();
 			else {
-				
+
 				setMatrix(getMatrix() + "\n");
-				
+
 				actual = firstCol.getDowncell();
 				firstCol = firstCol.getDowncell();
-			
+
 			}
 			ShowCell();
 
 		}
-		
+
 	}	
 	/*identifico donde va a empezar el rayo y lo pongo en la variable actual*/
 	public void getStartray(int f , int c) {
@@ -187,17 +191,17 @@ public class Gamezone {
 			else {
 				if (actual.getFila() != f && actual.getDowncell() != null)
 				{
-				actual = firstCol.getDowncell();
-				firstCol = firstCol.getDowncell();
+					actual = firstCol.getDowncell();
+					firstCol = firstCol.getDowncell();
 				}
-			
+
 			}
 			getStartray(f,c);
-			}
-		
-		setCurrent(actual);
 		}
-	
+
+		setCurrent(actual);
+	}
+
 	public void moverigth() {
 		setCurrent(actual);
 		actual = actual.getRigthcell();
@@ -214,50 +218,50 @@ public class Gamezone {
 		setCurrent(actual);
 		actual = actual.getDowncell();
 	}
-	
+
 	public void move() {
 		int vCelda = 0;
 		if (actual != null) {
 			vCelda = mpos();
-				if (vCelda != 0) {
-					if(vCelda == 1 && getDirection() == 1) // DE arriba hacia abajo
-						setDirection (4); //salir a la izquierda
-					else if(vCelda == 1 && getDirection() == 2) // DE abajo hacia arriba
-						setDirection (3); //salir a derecha
-					else if(vCelda == 1 && getDirection() == 3) // DE derecha a Izquierda
-						setDirection (2); //salir a la arriba
-					else if(vCelda == 1 && getDirection() == 4) // DE iquierda a derecha
-						setDirection (1); //salir a abajo
-					else if(vCelda == 2 && getDirection() == 1) // DE arriba hacia abajo
-						setDirection (3); //salir a la derecha
-					else if(vCelda == 2 && getDirection() == 2) // DE abajo hacia arriba
-						setDirection (4); //salir a izquierda
-					else if(vCelda == 2 && getDirection() == 3) // DE derecha a Izquierda
-						setDirection (1); //salir a abajo
-					else if(vCelda == 2 && getDirection() == 4) // DE iquierda a derecha
-						setDirection (2); //salir a arriba
-				}
-				switch (getDirection()) {
-					case 1:
-						movedown();
-						break;
-					case 2:
-						moveup();
-						break;
-					case 3:
-						moverigth();
-						break;
-					case 4:
-						moveleft();
-						break;
-				}
-				move();
+			if (vCelda != 0) {
+				if(vCelda == 1 && getDirection() == 1) // DE arriba hacia abajo
+					setDirection (4); //salir a la izquierda
+				else if(vCelda == 1 && getDirection() == 2) // DE abajo hacia arriba
+					setDirection (3); //salir a derecha
+				else if(vCelda == 1 && getDirection() == 3) // DE derecha a Izquierda
+					setDirection (2); //salir a la arriba
+				else if(vCelda == 1 && getDirection() == 4) // DE iquierda a derecha
+					setDirection (1); //salir a abajo
+				else if(vCelda == 2 && getDirection() == 1) // DE arriba hacia abajo
+					setDirection (3); //salir a la derecha
+				else if(vCelda == 2 && getDirection() == 2) // DE abajo hacia arriba
+					setDirection (4); //salir a izquierda
+				else if(vCelda == 2 && getDirection() == 3) // DE derecha a Izquierda
+					setDirection (1); //salir a abajo
+				else if(vCelda == 2 && getDirection() == 4) // DE iquierda a derecha
+					setDirection (2); //salir a arriba
+			}
+			switch (getDirection()) {
+			case 1:
+				movedown();
+				break;
+			case 2:
+				moveup();
+				break;
+			case 3:
+				moverigth();
+				break;
+			case 4:
+				moveleft();
+				break;
+			}
+			move();
 		}
-		
-		
+
+
 	}
 
-		public int mpos() {
+	public int mpos() {
 		int mp = 0;
 		if(actual.getMirror().equalsIgnoreCase("\\")) {
 			mp = 2;
@@ -268,24 +272,7 @@ public class Gamezone {
 		}
 		return mp;
 	}
-	/*
-	public void addRight(long n) {
-		Number newnumber = new Number(n);
-		cant++;
-		if(firstnumber==null) {
-			firstnumber = newnumber;
-			lastnumber = firstnumber;
-			mediananumber = firstnumber;
-			pos =1;
-		}else {
-			Number current = lastnumber;
-			newnumber.setPrevnum(lastnumber);
-			current.setNextnum(newnumber);
-			lastnumber = newnumber;
-			setMediana();			
-		}
-	}
-	*/
+
 	public String getGamer() {
 		return gamer;
 	}
@@ -328,6 +315,12 @@ public class Gamezone {
 	public void setCellOut(Cell cellOut) {
 		this.cellOut = cellOut;
 	}
-	
+	public Cell getCellx() {
+		return cellx;
+	}
+	public void setCellx(Cell cellx) {
+		this.cellx = cellx;
+	}
+
 }
 

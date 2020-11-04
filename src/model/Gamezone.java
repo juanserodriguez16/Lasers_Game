@@ -19,6 +19,7 @@ public class Gamezone {
 	private Cell cellOut;
 	private Cell cellx;
 	private Score root;
+	private String scores;
 
 	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
@@ -39,7 +40,6 @@ public class Gamezone {
 		contmirrors = nummirrors;
 		root = null;
 		
-
 
 
 	}
@@ -343,7 +343,33 @@ public class Gamezone {
 		}else if (newScore.getPoints()>recur.getPoints() && recur.getRight()==null) {
 			recur.setRight(newScore);
 			newScore.setParent(recur);	
+		}else {
+			if(newScore.getPoints() <= recur.getPoints() && recur.getLeft() != null) {
+				addScore(recur.getLeft(),newScore);
+			}else {
+				addScore(recur.getRight(),newScore);
+			}
 		}
+	}
+	public String inOrden() {
+		return inOrden(root);
+	}
+	public String inOrden(Score recur) {
+		String score= "";
+		if(recur != null) {
+			score += inOrden(recur.getLeft());
+			score += recur.getPlayer() + " : " + recur.getPoints() + "\n";
+			score += inOrden(recur.getRight());
+			
+			
+		}
+		return score;
+	}
+	public String getScores() {
+		return scores;
+	}
+	public void setScores(String scores) {
+		this.scores = scores;
 	}
 }
 

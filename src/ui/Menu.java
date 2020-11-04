@@ -135,7 +135,8 @@ public class Menu {
 		}
 		
 		//player, points, numfilas, numcolumnas, nummirrors
-		
+		score = new Score(gz.getGamer(),calculatepoints(),gz.getNumfilas(), gz.getNumcolumnas(),gz.getNummirrors());
+		gz.addScore(score);
 	}
 	public int  calculatepoints() {
 		int puntos = (gz.getNumcolumnas() * gz.getNumfilas()) / gz.getNummirrors();
@@ -154,8 +155,9 @@ public class Menu {
 				play();
 				System.out.println("Felicidades ganaste");
 				break;
+				
 			case 2: 
-				score.printInOrder();
+				System.out.println(gz.inOrden());
 			}
 			startprogram();	
 		}

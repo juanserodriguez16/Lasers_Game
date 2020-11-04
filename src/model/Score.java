@@ -62,15 +62,7 @@ public class Score {
 	public void setNummirrors(int nummirrors) {
 		this.nummirrors = nummirrors;
 	}
-	public void printInOrder() {
-        if (left != null) {
-            left.printInOrder();
-        }
-        System.out.println(getPoints() + " " + getPlayer() );
-        if (right != null) {
-            right.printInOrder();
-        }
-    }
+	
 	public Score getParent() {
 		return parent;
 	}

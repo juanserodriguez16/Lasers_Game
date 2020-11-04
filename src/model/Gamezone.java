@@ -163,13 +163,13 @@ public class Gamezone {
 				mat = "[ ]";
 			setMatrix(getMatrix() + mat );
 			
-			/*System.out.print("["+actual.getMirror()+"]");*/
+			
 			if (actual.getRigthcell() != null) 
 				actual = actual.getRigthcell();
 			else {
 				
 				setMatrix(getMatrix() + "\n");
-				/*System.out.println("");*/
+				
 				actual = firstCol.getDowncell();
 				firstCol = firstCol.getDowncell();
 			

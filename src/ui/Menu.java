@@ -14,7 +14,7 @@ public class Menu {
 
 	public void initialize() {
 		sc = new Scanner(System.in);
-
+		gz = new Gamezone();
 	}
 	public void showmenu() {
 		System.out.println("1) Jugar");
@@ -28,7 +28,7 @@ public class Menu {
 				+ " columnas de la cuadricula , cantidad de espejos)");
 		String d = sc.nextLine();
 		String[] data = d.split(" "); 
-		gz = new Gamezone(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
+		gz.createGame(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
 		gz.	newCell();
 		gz.newMirrow();
 
@@ -132,14 +132,17 @@ public class Menu {
 			readcoordenadas( );
 			System.out.println(gz.getGamer() +" te faltan " + gz.getContmirrors() + " espejos por encontrar");
 			play();
+		} else {
+			finishGame();
 		}
-		
+	}
+	private void finishGame() {
 		//player, points, numfilas, numcolumnas, nummirrors
 		score = new Score(gz.getGamer(),calculatepoints(),gz.getNumfilas(), gz.getNumcolumnas(),gz.getNummirrors());
 		gz.addScore(score);
 	}
 	public int  calculatepoints() {
-		int puntos = (gz.getNumcolumnas() * gz.getNumfilas()) / gz.getNummirrors();
+		int puntos = (gz.getNumcolumnas() + gz.getNumfilas()) * gz.getNummirrors();
 		return puntos;
 	}
 	public void startprogram() {

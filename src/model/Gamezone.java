@@ -19,9 +19,25 @@ public class Gamezone {
 	private Cell cellOut;
 	private Cell cellx;
 	private Score root;
-
-
-	public Gamezone(String gamer, int numfilas, int numcolumnas, int nummirrors) {
+	/**
+	* Initialize all variables  <br>
+	* <b> pre: </b> variables must be created in class <br>
+	* <b> post: </b> the variables are initialized, the numbers are 0 and the strings are empty.
+	*
+	*/
+	public Gamezone() {
+		root = null;
+	}
+	/**
+	 * creation of the matrix and initialization of the attributes of the game zone class  <br>
+	 * <b> pre: </b>
+	 * <b> post: </b> a game zone type object in addition to the initialization of the variables.
+	 * @param gamer a 
+	 * @param numfilas
+	 * @param numcolumnas
+	 * @param nummirrors
+	 */
+	public void createGame(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
 		this.numfilas = numfilas;
 		this.numcolumnas = numcolumnas;
@@ -38,9 +54,6 @@ public class Gamezone {
 		mirrorsasig = 0;
 		matrix = "";
 		contmirrors = nummirrors;
-		root = null;
-		
-
 
 	}
 	public Cell getActual() {
@@ -332,16 +345,12 @@ public class Gamezone {
 	}
 	public void addScore(Score newScore) {
 		if (root == null) {
-			
 			root = newScore;
 		}else {
 			addScore(root,newScore); 
-			
 		}
-			
 	}
 	public void addScore(Score recur, Score newScore ) {
-		System.out.println("holi");
 		if(newScore.getPoints()<= recur.getPoints() && recur.getLeft() ==null) {
 			recur.setLeft(newScore);
 			newScore.setParent(recur);

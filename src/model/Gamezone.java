@@ -20,8 +20,8 @@ public class Gamezone {
 	private Cell cellx;
 	private Score root;
 	/**
-	* Initialize all variables  <br>
-	* <b> pre: </b> variables must be created in class <br>
+	* Constructor of the class  <br>
+	* <b> pre: </b>  
 	* <b> post: </b> the variables are initialized, the numbers are 0 and the strings are empty.
 	*
 	*/
@@ -32,10 +32,10 @@ public class Gamezone {
 	 * creation of the matrix and initialization of the attributes of the game zone class  <br>
 	 * <b> pre: </b>
 	 * <b> post: </b> a game zone type object in addition to the initialization of the variables.
-	 * @param gamer a 
-	 * @param numfilas
-	 * @param numcolumnas
-	 * @param nummirrors
+	 * @param gamer the variable that stores the player's username. gamer != null.
+	 * @param numfilas the number of rows in the matrix. numfilas != null.
+	 * @param numcolumnas the number of columns in the matrix. numcolumnas != null.
+	 * @param nummirrors the number of mirrors in the matrix. nummirrors != null.
 	 */
 	public void createGame(String gamer, int numfilas, int numcolumnas, int nummirrors) {
 		this.gamer = gamer;
@@ -60,6 +60,11 @@ public class Gamezone {
 		return actual;
 
 	}
+	/**
+	 * initialize variables <br>
+	 * <b> pre: </b>
+	 * <b> post: </b> initialize all variables that influence matrix traversal.
+	 */
 	public void setFirst() {
 		actual = first;
 		firstCol = first;
@@ -80,7 +85,11 @@ public class Gamezone {
 		this.numcolumnas = numcolumnas;
 	}
 
-
+	/**
+	 * create of matrix <br>
+	 * <b> pre: </b>
+	 * <b> post: </b> create the relationships between the nodes to create the matrix.
+	 */
 	public void newCell() {
 		boolean newfila;
 
@@ -124,7 +133,11 @@ public class Gamezone {
 		}
 
 	}
-
+	/**
+	 * randomly assigns the coordinate of a mirror, including the direction<br>
+	 * <b> pre: </b>
+	 * <b> post: </b> new mirror in the cell.
+	 */
 	public void newMirrow() {
 		int rowmirrow = 0;
 		int colmirrow = 0;
@@ -139,7 +152,15 @@ public class Gamezone {
 			newMirrow();
 		}
 	}
-
+	/**
+	 * Go through the matrix and locate the mirrors generating their address<br>
+	 * <b> pre: </b> Relationships in the matrix must be created
+	 * <b> post: </b> a cell with an assigned mirror
+	 * @param rowmirrow the coordinate in rows. rowmirrow != null.
+	 * @param colmirrow the coordinate in columns. rowmirrow != null.
+	 * @param direction direction of the mirror. direction != null.
+	 * @param nodo element to traverse the matrix. 
+	 */
 	public void AsigMirrow(int rowmirrow, int colmirrow, int direction, Cell nodo){
 		String mirr;
 		if(nodo.getColumna() != colmirrow)
@@ -167,7 +188,9 @@ public class Gamezone {
 		this.nummirrors = nummirrors;
 	}
 
-
+	/**
+	 * stores each cell to be displayed by console.<br>
+	 */
 	public void ShowCell() {
 		String mat;
 		if(actual != null) {
@@ -200,6 +223,13 @@ public class Gamezone {
 
 	}	
 	/*identifico donde va a empezar el rayo y lo pongo en la variable actual*/
+	/**
+	 * returns the cell where the beam is going to be fired and stores it in the current variable <br>
+	 * <b> pre: </b> Relationships in the matrix must be created and cowls and rows
+	 * <b> post: </b> the cell where the beam begins to shoot
+	 * @param f rows. f != null && f <= numfilas.
+	 * @param c columns. c != null && c <= numcolumnas.
+	 */
 	public void getStartray(int f , int c) {
 		if (actual.getFila() != f || actual.getColumna() != c){
 			if (actual.getRigthcell() != null && actual.getColumna() != c) 
@@ -217,24 +247,39 @@ public class Gamezone {
 
 		setCurrent(actual);
 	}
-
+	/**
+	 * Modify the direction of the beam's travel
+	 */
 	public void moverigth() {
 		setCurrent(actual);
 		actual = actual.getRigthcell();
 	}
+	/**
+	 * Modify the direction of the beam's travel
+	 */
 	public void moveleft() {
 		setCurrent(actual);
 		actual = actual.getLefthcell();
 	}
+	/**
+	 * Modify the direction of the beam's travel
+	 */
 	public void moveup() {
 		setCurrent(actual);
 		actual = actual.getUpcell();
 	}
+	/**
+	 * Modify the direction of the beam's travel
+	 */
 	public void movedown() {
 		setCurrent(actual);
 		actual = actual.getDowncell();
 	}
-
+	/**
+	 * Movement controller method <br>
+	 * <b> pre: </b>  the direction of the mirror must be defined in addition to the current position
+	 * <b> post: </b> The direction in which each cell should move
+	 */
 	public void move() {
 		int vCelda = 0;
 		if (actual != null) {
@@ -276,7 +321,12 @@ public class Gamezone {
 
 
 	}
-
+	/**
+	 * determine a direction of the mirror. <br>
+	 * <b> pre: </b> current cell cannot be null.
+	 * <b> post: </b> the current mirror direction.
+	 * @return direction. 
+	 */
 	public int mpos() {
 		int mp = 0;
 		if(actual.getMirror().equalsIgnoreCase("\\")) {
@@ -343,6 +393,12 @@ public class Gamezone {
 	public void setRoot(Score root) {
 		this.root = root;
 	}
+	/**
+	 * add a score to the binary search tree. <br>
+	 * <b> pre: </b> 
+	 * <b> post: </b> the new score becomes the root
+	 * @param newScore
+	 */
 	public void addScore(Score newScore) {
 		if (root == null) {
 			root = newScore;
@@ -350,6 +406,13 @@ public class Gamezone {
 			addScore(root,newScore); 
 		}
 	}
+	/**
+	 * add a score to the binary search tree. <br>
+	 * <b> pre: </b> the score cannot be null and there must be a root
+	 * <b> post: </b> an added score.
+	 * @param recur current score. recur != null.
+	 * @param newScore the new score to add. newScore != null.
+	 */
 	public void addScore(Score recur, Score newScore ) {
 		if(newScore.getPoints()<= recur.getPoints() && recur.getLeft() ==null) {
 			recur.setLeft(newScore);
@@ -365,9 +428,22 @@ public class Gamezone {
 			}
 		}
 	}
+	/**
+	 * returns the string generated by the in-order method led by the root <br>
+	 * <b> pre: </b> root created and filled
+	 * <b> post: </b> string with the information of the binary search tree
+	 * @return String score.
+	 */
 	public String inOrden() {
 		return inOrden(root);
 	}
+	/**
+	 * generates a string with the data name and score of the players<br>
+	 * <b> pre: </b> The scores must exist and the binary search tree cannot be empty.
+	 * <b> post: </b> string with sorted data from binary search tree
+	 * @param recur current score. recur != null.
+	 * @return String score
+	 */
 	public String inOrden(Score recur) {
 		String score= "";
 		if(recur != null) {
